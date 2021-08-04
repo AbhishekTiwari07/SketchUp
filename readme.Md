@@ -1,5 +1,5 @@
 - git clone https://github.com/AbhishekTiwari07/SketchUp.git
 - cd SketchUp
-- git checkout -b <your-branch-name>
+- git checkout -b your-branch-name
 - npm install
 - npm start
