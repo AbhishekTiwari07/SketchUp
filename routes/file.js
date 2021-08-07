@@ -2,28 +2,27 @@ const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
 
-let storage = multer.diskStorage({
-    destination: (req, res, cb) => cb(null, 'uploads'),
-    filename: (req, res, cb) => {
-        const fileName = `${Data.now}-${Math.random()*1E6}${path.extname(file.originalname)}`
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'uploads'),
+    filename: (req, file, cb) => {
+        const fileName = `${Date.now()}${path.extname(file.originalname)}`
         cb(null, fileName)
     }
 })
 
-let upload = multer({
-    storage,
-    limit : { fileSize: 10000000},
-}).single('img')
+const upload = multer({storage})
 
-router.post('/', (req, res)=>{
+router.post('/',(req, res, next)=>{
     try{
-        if(!req.file)
-            throw new Error('All fields are required')
 
-        upload(req, res, async (err)=>{
+        upload.single('image')(req, res, (err)=>{
             if(err)
                 throw new Error(err.message)
-
+            console.log(req.file)
+            return res.send({
+                'message':'File successfully uploaded',
+                'address': req.file.path
+            })
         })
     }
     catch(e){
