@@ -21,6 +21,8 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongoose": "^5.13.5"
+    "json-web-token": "^3.2.0",
+    "mongoose": "^5.13.5",
+    "multer": "^1.4.2"
   }
 }
