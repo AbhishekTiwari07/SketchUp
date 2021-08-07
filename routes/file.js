@@ -33,4 +33,4 @@ router.post('/', (req, res)=>{
     }
 })
 
-model.exports = router
+module.exports = router
