@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
+require('dotenv').config()
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads'),
@@ -21,7 +22,7 @@ router.post('/',(req, res, next)=>{
             console.log(req.file)
             return res.send({
                 'message':'File successfully uploaded',
-                'address': req.file.path
+                'address': `${process.env.APP_BASE_URL}/`
             })
         })
     }
