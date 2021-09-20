@@ -4,34 +4,26 @@ const path = require('path')
 require('dotenv').config()
 
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads'),
-    filename: (req, file, cb) => {
-        const fileName = `${Date.now()}${path.extname(file.originalname)}`
-        cb(null, fileName)
+const upload = multer({
+    dest: 'artworks',
+    limits: {
+        fileSize: 10000000
+    },
+    fileFilter(req, file, cb){
+        if(!file.originalname.match(/\.(png|jpg|jpeg)$/))
+            return cb(new Error('Please upload image file'));
+
+        cb(null,true)
     }
 })
 
-const upload = multer({storage})
-
-router.post('/',(req, res, next)=>{
+router.post('/upload', upload.single('image'), (req,res)=>{
     try{
-
-        upload.single('image')(req, res, (err)=>{
-            if(err)
-                throw new Error(err.message)
-            console.log(req.file)
-            return res.send({
-                'message':'File successfully uploaded',
-                'address': `${process.env.APP_BASE_URL}/`
-            })
-        })
+        res.send('uploaded')
     }
     catch(e){
-        res.send({
-            error : e.message
-        })
+        res.send(e.message)
     }
-})
+});
 
 module.exports = router
