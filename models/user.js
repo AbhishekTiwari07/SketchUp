@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const validator = require('validate')
+const validator = require('validator')
 const { Schema } = mongoose;
 const Artwork = require('./artwork')
 
@@ -17,15 +17,18 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    awtwork: {
+        type: Number
     }
 },{
     timestamps: true
 });
 
-userSchema.virtual('artwork',{
-    ref:'Artwork',
-    localField: '_id',
-    foreignField: 'user'
+userSchema.virtual('artowork',{
+    ref:'Image',
+    localField: 'artwork',
+    foreignField: '_id'
 })
 
 const User = mongoose.model('User', userSchema);
