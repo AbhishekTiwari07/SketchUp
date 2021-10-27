@@ -18,18 +18,19 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    awtwork: {
-        type: Number
-    }
+    artworks: [{
+        type: Schema.Types.ObjectId,
+        ref: "Step"
+    }]
 },{
     timestamps: true
 });
 
-userSchema.virtual('artowork',{
-    ref:'Image',
-    localField: 'artwork',
-    foreignField: '_id'
-})
+userSchema.pre('save', async function(next) {
+    if(this.isModified('password'))
+        this.password = await bcrypt.hash(this.password,8)
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
 

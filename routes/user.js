@@ -1,5 +1,6 @@
 const { response } = require('express')
 const User = require('../models/User')
+const bcrypt = require('bcrypt')
 const router = require('express').Router()
 require('dotenv').config()
 
@@ -30,12 +31,30 @@ router.post('/', async (req,res)=>{
     }
 })
 
-router.post('/login',async (req,res)=>{
+router.post('/login', async (req,res)=>{
     try{
-        
+        const user = await User.findOne({
+            email : req.body.email
+        })
+
+        if(!user)
+            throw new Error('No User Found')
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+        if(!isMatch)
+            throw new Error('Wrong Email/Password');
+
+        const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET)
+            
+        res.status(200).send({
+            token
+        })
+
     }
     catch(e){
-
+        res.status(400).json({
+            message: e.message
+        })
     }
 })
 

@@ -13,7 +13,8 @@ const imageSchema = new Schema({
     likes: {
         type: Number,
         default: 0
-    }
+    },
+    user: String
 },{
     timestamps: true
 })
