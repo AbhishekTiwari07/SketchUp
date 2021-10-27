@@ -9,7 +9,8 @@ router.get('/me', auth, async (req,res)=>{
     try{
         const {name, email, artworks} = await User.findOne({
             _id: req.user.id
-        })
+        }).populate('artworks');
+        
         res.status(200).send({
             name,
             email,
