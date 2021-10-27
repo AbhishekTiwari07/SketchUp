@@ -3,7 +3,7 @@ const multer = require('multer')
 const path = require('path')
 require('dotenv').config()
 const Image = require('../models/artwork')
-const User = require('../models/User')
+const User = require('../models/user')
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -27,16 +27,22 @@ router.post('/upload', upload.single('image'), async (req,res)=>{
         name: req.body.name,
         path: `/artworks/${req.file.filename}`
     });
-    const result = await image.save()
 
-    await User.findOne({
-        id: req.user.id
-    }).populate('artwork');
+    await image.save()
+
+    var user = await User.findOne({
+        _id: req.user.id
+    });
+
+    user.artworks.push(image);
+
+    const response = await user.save();
 
     res.status(200).send({
         message: 'File uploaded',
-        result
-    })
+        response
+    });
+    
 }, (err, req, res, next)=>{
     res.status(400).send({
         message: err.message

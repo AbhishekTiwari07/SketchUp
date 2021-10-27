@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
+const bcrypt = require('bcrypt')
 const { Schema } = mongoose;
-const Artwork = require('./artwork')
 
 const userSchema = new Schema({
     name : {
@@ -20,7 +19,7 @@ const userSchema = new Schema({
     },
     artworks: [{
         type: Schema.Types.ObjectId,
-        ref: "Step"
+        ref: "Image"
     }]
 },{
     timestamps: true

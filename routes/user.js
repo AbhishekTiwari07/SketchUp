@@ -1,15 +1,20 @@
-const { response } = require('express')
-const User = require('../models/User')
+const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const router = require('express').Router()
+const auth = require('../middleware/auth')
 require('dotenv').config()
 
-router.get('/', async (req,res)=>{
+router.get('/me', auth, async (req,res)=>{
     try{
-        const result = await User.find({
-            id: req.body.id
+        const {name, email, artworks} = await User.findOne({
+            _id: req.user.id
         })
-        res.status(200).send(result)
+        res.status(200).send({
+            name,
+            email,
+            artworks
+        })
     }
     catch(e){
         res.status(400).send({
@@ -18,7 +23,7 @@ router.get('/', async (req,res)=>{
     }
 });
 
-router.post('/', async (req,res)=>{
+router.post('/register', async (req,res)=>{
     try{
         const user = new User(req.body);
         const result = await user.save();
