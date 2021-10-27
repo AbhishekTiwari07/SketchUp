@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
+const auth = require('../middleware/auth')
 require('dotenv').config()
 const Image = require('../models/artwork')
 const User = require('../models/user')
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage})
 
-router.post('/upload', upload.single('image'), async (req,res)=>{
+router.post('/upload', auth, upload.single('image'), async (req,res)=>{
     const image = new Image({
         name: req.body.name,
         path: `/artworks/${req.file.filename}`
