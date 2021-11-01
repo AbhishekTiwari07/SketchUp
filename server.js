@@ -22,6 +22,7 @@ const port = process.env.PORT || 3000;
 
 const dirPublic = path.join(__dirname,'./artworks')
 app.use(express.static(dirPublic))
+
 app.use('/files',files)
 app.use('/user', user)
 

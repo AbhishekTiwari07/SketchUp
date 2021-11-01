@@ -49,7 +49,7 @@ router.post('/changeowner/:id', async (req, res)=>{
             var seller = await User.findOne({_id: sellerArt.user});
 
             console.log(seller)
-            
+
             seller.artworks = seller.artworks.filter(art=>{
                 return art == req.params.id
             });
@@ -83,7 +83,7 @@ router.post('/changeowner/:id', async (req, res)=>{
 router.post('/upload', auth, upload.single('image'), async (req,res)=>{
     const image = new Image({
         name: req.body.name,
-        path: `/artworks/${req.file.filename}`,
+        path: `/${req.file.filename}`,
         user: req.user.id
     });
 
