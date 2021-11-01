@@ -43,8 +43,13 @@ router.post('/changeowner/:id', async (req, res)=>{
 
         var sellerArt = await Image.findOne({_id: req.params.id});
 
+        console.log(sellerArt)
+
         try{
             var seller = await User.findOne({_id: sellerArt.user});
+
+            console.log(seller)
+            
             seller.artworks = seller.artworks.filter(art=>{
                 return art == req.params.id
             });
