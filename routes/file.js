@@ -60,7 +60,7 @@ router.post('/changeowner/:id', async (req, res)=>{
             await client.save();
         }
         catch(e){
-            throw new Error('Error while updating Client')
+            throw new Error('Error while updating Client');
         }
 
         res.status(400).send({
