@@ -10,6 +10,8 @@ const imageSchema = new Schema({
         type: String,
         required: true
     },
+    price: Number,
+    description: String,
     user: String
 },{
     timestamps: true

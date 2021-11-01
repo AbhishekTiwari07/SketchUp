@@ -84,6 +84,7 @@ router.post('/upload', auth, upload.single('image'), async (req,res)=>{
     const image = new Image({
         name: req.body.name,
         path: `/${req.file.filename}`,
+        description: req.body.description,
         user: req.user.id
     });
 
