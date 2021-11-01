@@ -26,12 +26,12 @@ const upload = multer({storage});
 router.get('/collection', async (req, res)=>{
     try{
         const art = await Image.find();
-        res.send({
+        res.status(200).send({
             art
         });
     }
     catch(e){
-        res.send({
+        res.status(400).send({
             "message": e.message
         })
     }
@@ -39,28 +39,47 @@ router.get('/collection', async (req, res)=>{
 
 router.post('/changeowner/:id', async (req, res)=>{
     try{
-        const {user} = req.body;
+        const {clientId} = req.body;
 
-        const art = await Image.findOneAndUpdate({_id: req.params.id},{
-            user
-        });
+        var sellerArt = await Image.findOne({_id: req.params.id});
+
+        try{
+            var seller = await User.findOne({_id: sellerArt.user});
+            seller.artworks = seller.artworks.filter(art=>{
+                return art == req.params.id
+            });
+            await seller.save();
+        }
+        catch(e){
+            throw new Error('Error while updating Seller')
+        }
+
+        try{
+            var client = await Image.findOne({_id: clientId});
+            client.push(req.params.id);
+            await client.save();
+        }
+        catch(e){
+            throw new Error('Error while updating Client')
+        }
 
         res.status(400).send({
             "message": 'Owner Updated',
-            art
+            sellerArt
         });
     }
     catch(e){
         res.status(400).send({
             "message": e.message
-        })
+        });
     }
 });
 
 router.post('/upload', auth, upload.single('image'), async (req,res)=>{
     const image = new Image({
         name: req.body.name,
-        path: `/artworks/${req.file.filename}`
+        path: `/artworks/${req.file.filename}`,
+        user: req.user.id
     });
 
     await image.save()
