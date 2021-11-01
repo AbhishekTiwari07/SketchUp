@@ -21,7 +21,41 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({storage})
+const upload = multer({storage});
+
+router.get('/collection', async (req, res)=>{
+    try{
+        const art = await Image.find();
+        res.send({
+            art
+        });
+    }
+    catch(e){
+        res.send({
+            "message": e.message
+        })
+    }
+});
+
+router.post('/changeowner/:id', async (req, res)=>{
+    try{
+        const {user} = req.body;
+
+        const art = await Image.findOneAndUpdate({_id: req.params.id},{
+            user
+        });
+
+        res.status(400).send({
+            "message": 'Owner Updated',
+            art
+        });
+    }
+    catch(e){
+        res.status(400).send({
+            "message": e.message
+        })
+    }
+});
 
 router.post('/upload', auth, upload.single('image'), async (req,res)=>{
     const image = new Image({

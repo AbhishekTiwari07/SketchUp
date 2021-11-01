@@ -7,9 +7,29 @@ require('dotenv').config()
 
 router.get('/me', auth, async (req,res)=>{
     try{
-        const {name, email, artworks} = await User.findOne({
+        const {_id,name, email, artworks} = await User.findOne({
             _id: req.user.id
         }).populate('artworks');
+        
+        res.status(200).send({
+            _id,
+            name,
+            email,
+            artworks
+        })
+    }
+    catch(e){
+        res.status(400).send({
+            message: e.message
+        })
+    }
+});
+
+router.get('/details/:id', async (req, res)=>{
+    try{
+        const {name, email, artworks} = await User.findOne({
+            _id: req.params.id
+        })
         
         res.status(200).send({
             name,
@@ -24,6 +44,25 @@ router.get('/me', auth, async (req,res)=>{
     }
 });
 
+router.get('/artist/:id', async (req, res)=>{
+    try{
+        const {name, email, artworks} = await User.findOne({
+            _id: req.params.id
+        }).populate('artworks');
+        
+        res.status(200).send({
+            name,
+            email,
+            artworks
+        })
+    }
+    catch(e){
+        res.status(400).send({
+            message: e.message
+        })
+    }
+})
+
 router.post('/register', async (req,res)=>{
     try{
         const user = new User(req.body);
@@ -35,7 +74,7 @@ router.post('/register', async (req,res)=>{
             message: e.message
         })
     }
-})
+});
 
 router.post('/login', async (req,res)=>{
     try{
@@ -62,6 +101,6 @@ router.post('/login', async (req,res)=>{
             message: e.message
         })
     }
-})
+});
 
 module.exports = router;
