@@ -7,7 +7,7 @@ require('dotenv').config()
 
 router.get('/me', auth, async (req,res)=>{
     try{
-        const {_id,name, email, artworks} = await User.findOne({
+        const {_id,name, email,bio, artworks} = await User.findOne({
             _id: req.user.id
         }).populate('artworks');
         
@@ -15,6 +15,7 @@ router.get('/me', auth, async (req,res)=>{
             _id,
             name,
             email,
+            bio,
             artworks
         })
     }
@@ -61,7 +62,7 @@ router.get('/artist/:id', async (req, res)=>{
             message: e.message
         })
     }
-})
+});
 
 router.post('/register', async (req,res)=>{
     try{

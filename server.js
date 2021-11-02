@@ -20,11 +20,11 @@ app.use(cors({
 
 const port = process.env.PORT || 3000;
 
-const dirPublic = path.join(__dirname,'./artworks')
-app.use(express.static(dirPublic))
+const dirPublic = path.join(__dirname,'./artworks');
+app.use(express.static(dirPublic));
 
-app.use('/files',files)
-app.use('/user', user)
+app.use('/files',files);
+app.use('/user', user);
 
 app.listen(port, ()=>{
     console.log(`Server up at port ${port}`)
