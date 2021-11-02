@@ -43,15 +43,13 @@ router.post('/changeowner/:id', async (req, res)=>{
 
         var sellerArt = await Image.findOne({_id: req.params.id});
 
-        console.log(sellerArt)
+        console.log(sellerArt.user)
 
         try{
             var seller = await User.findOne({_id: sellerArt.user});
 
-            console.log(seller)
-
             seller.artworks = seller.artworks.filter(art=>{
-                return art == req.params.id
+                return art != req.params.id
             });
             await seller.save();
         }
@@ -61,7 +59,7 @@ router.post('/changeowner/:id', async (req, res)=>{
 
         try{
             var client = await Image.findOne({_id: clientId});
-            client.push(req.params.id);
+            client.artworks.push(image);
             await client.save();
         }
         catch(e){
@@ -85,6 +83,7 @@ router.post('/upload', auth, upload.single('image'), async (req,res)=>{
         name: req.body.name,
         path: `/${req.file.filename}`,
         description: req.body.description,
+        price: req.body.price,
         user: req.user.id
     });
 
